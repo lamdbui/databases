@@ -1,4 +1,5 @@
 var models = require('../models');
+// var 
 
 module.exports = {
   messages: {
@@ -8,8 +9,17 @@ module.exports = {
 
   users: {
     // Ditto as above
-    get: function (req, res) {},
-    post: function (req, res) {}
+    get: function (req, res) {
+      // res.send('hello');
+
+    },
+    post: function (req, res) {
+      // req.body
+
+
+      res.send('hello');
+
+    }
   }
 };
 
