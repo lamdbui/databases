@@ -5,10 +5,10 @@ var mysql = require('mysql');
 // and to the database "chat".
 
 var connection = mysql.createConnection({
-  host: '127.0.0.1:8000',
+  host: '127.0.0.1',
   user: 'root',
-  password: '',
-  database: '../schema.sql',
+  password: 'plantlife',
+  database: 'chat',
 });
 
 
@@ -20,7 +20,11 @@ connection.connect((err) => {
   }
 });
 
-connection.end();
+
+
+exports.connection = connection;
+exports.closeConnection = connection.end;
+
 
 
 
