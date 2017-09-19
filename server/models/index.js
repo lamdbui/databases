@@ -23,6 +23,7 @@ module.exports = {
               console.log('ERROR: problem creating room -', message.roomname);
               callback(false);
             } else {
+              // get id for a given name for the foreign key
               connection.query(`SELECT * from users WHERE name='${message.username}'`, (error, userResults, fields) => {
                 if (error) {
                   console.log('ERROR: problem accessing users table');
@@ -30,6 +31,7 @@ module.exports = {
                 } else {
                   // checking for existence for user
                   if (userResults.length === 1) {
+                    // if user exists, then go ahead and add the message!
                     connection.query(`INSERT INTO messages VALUES(null, ${userResults[0].id}, '${message.message}', ${roomResults[0].id})`, (error, results, fields) => {
                       if (error) {
                         console.log('ERROR: problem inserting message -', message, 'with error:', error);
@@ -45,6 +47,7 @@ module.exports = {
             }
           });
         } else {
+          // if the room already exists
           connection.query(`SELECT * from users WHERE name='${message.username}'`, (error, userResults, fields) => {
             if (error) {
               console.log('ERROR: problem accessing users table');
@@ -52,6 +55,7 @@ module.exports = {
             } else {
               // checking for existence for user
               if (userResults.length === 1) {
+                // we have all we need, let's insert the new message!
                 connection.query(`INSERT INTO messages VALUES(null, ${userResults[0].id}, '${message.message}', ${roomResults[0].id})`, (error, results, fields) => {
                   if (error) {
                     console.log('ERROR: problem inserting message -', message, 'with error:', error);
