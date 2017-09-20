@@ -13,6 +13,10 @@ module.exports = {
           console.log('ERROR: problem accessing messages', error);
           callback(JSON.stringify(results));
         } else {
+          // return empty message array when no messages available
+          if (messageResults.length === 0) {
+            callback(JSON.stringify(results));
+          }
           // for each message in messageResults
           messageResults.forEach(message => {
             // convert message into result message format
@@ -134,13 +138,24 @@ module.exports = {
       });
     },
     post: function (username, callback) {
-      connection.query(`INSERT INTO users VALUES(null, '${username}')`, (error, results, fields) => {
-        if (error) {
-          console.log('ERROR: problem inserting user -', username);
+      this.get(userList => {
+        let mappedUserListNames = userList.map(userObj => {
+          return userObj.username;
+        });
+        if (mappedUserListNames.indexOf(username) === -1) {
+          connection.query(`INSERT INTO users VALUES(null, '${username}')`, (error, results, fields) => {
+            if (error) {
+              console.log('ERROR: problem inserting user -', username);
+              callback(false);
+            }
+            console.log(`SUCCESS: '${username}' successfully added into table`);
+            callback(true);
+          });
+        } else {
+          console.log('ERROR: user already exists in table -', username);
+          // TODO: maybe send object with additional data to handle different post failure scenarios
           callback(false);
         }
-        console.log(`SUCCESS: '${username}' successfully added into table`);
-        callback(true);
       });
     }
   }
